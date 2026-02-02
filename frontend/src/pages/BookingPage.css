@@ -1,0 +1,56 @@
+.booking-page {
+  padding: 40px 0;
+  min-height: calc(100vh - 80px);
+}
+
+.booking-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.facility-details {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.facility-details h2 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.facility-details .facility-type {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.facility-details .facility-info {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+.facility-details .facility-info div {
+  margin-bottom: 10px;
+}
+
+.booking-form {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.booking-form h3 {
+  margin-bottom: 20px;
+  color: var(--dark-text);
+}
+
+@media (max-width: 768px) {
+  .booking-layout {
+    grid-template-columns: 1fr;
+  }
+}

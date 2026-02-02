@@ -1,0 +1,61 @@
+.staff-portal {
+  padding: 40px 0;
+  min-height: calc(100vh - 80px);
+}
+
+.staff-portal h1 {
+  margin-bottom: 40px;
+  color: var(--primary-color);
+}
+
+.bookings-section h2 {
+  margin-bottom: 20px;
+}
+
+.bookings-table {
+  background: white;
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bookings-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bookings-table th,
+.bookings-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.bookings-table th {
+  background-color: var(--light-bg);
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+.bookings-table tbody tr:hover {
+  background-color: var(--light-bg);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #059669;
+}
