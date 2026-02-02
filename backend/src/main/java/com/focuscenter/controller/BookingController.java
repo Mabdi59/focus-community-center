@@ -7,11 +7,14 @@ import com.focuscenter.repository.UserRepository;
 import com.focuscenter.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -27,9 +30,7 @@ public class BookingController {
 
     @GetMapping("/my")
     public ResponseEntity<List<Booking>> getMyBookings() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = getCurrentUser();
         return ResponseEntity.ok(bookingService.getBookingsByUserId(user.getId()));
     }
 
@@ -41,7 +42,9 @@ public class BookingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Booking> getBookingById(@PathVariable Long id) {
-        return ResponseEntity.ok(bookingService.getBookingById(id));
+        Booking booking = bookingService.getBookingById(id);
+        enforceBookingAccess(booking);
+        return ResponseEntity.ok(booking);
     }
 
     @GetMapping("/facility/{facilityId}")
@@ -51,9 +54,7 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<Booking> createBooking(@Valid @RequestBody BookingRequest request) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = getCurrentUser();
         return ResponseEntity.ok(bookingService.createBooking(user.getId(), request));
     }
 
@@ -67,7 +68,32 @@ public class BookingController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBooking(@PathVariable Long id) {
+        Booking booking = bookingService.getBookingById(id);
+        enforceBookingAccess(booking);
         bookingService.deleteBooking(id);
         return ResponseEntity.ok().build();
+    }
+
+    private User getCurrentUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    private void enforceBookingAccess(Booking booking) {
+        if (isStaffOrAdmin()) {
+            return;
+        }
+        User user = getCurrentUser();
+        if (!booking.getUser().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to access this booking");
+        }
+    }
+
+    private boolean isStaffOrAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_STAFF")
+                        || authority.getAuthority().equals("ROLE_ADMIN"));
     }
 }

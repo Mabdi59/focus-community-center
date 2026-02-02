@@ -1,5 +1,6 @@
 package com.focuscenter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,10 +22,12 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"password", "roles", "createdAt", "updatedAt"})
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "facility_id", nullable = false)
+    @JsonIgnoreProperties({"createdAt", "updatedAt"})
     private Facility facility;
 
     @Column(name = "start_time", nullable = false)
