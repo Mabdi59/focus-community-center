@@ -81,6 +81,8 @@ spring.datasource.username=postgres
 spring.datasource.password=postgres
 ```
 
+The backend will auto-seed a handful of facilities on first run if the database is empty.
+
 Build and run the backend:
 
 ```bash
@@ -107,6 +109,12 @@ Install dependencies:
 npm install
 ```
 
+Create a `.env` file if you want to point the frontend at a different backend URL:
+
+```bash
+VITE_API_URL=http://localhost:8080/api
+```
+
 Run the development server:
 
 ```bash
@@ -124,6 +132,11 @@ After starting the application, you can create users with different roles:
 - **ADMIN**: Can manage facilities and all bookings
 
 To create STAFF or ADMIN users, manually update the `user_roles` table in the database after registration.
+
+## Notes
+
+- Booking cancellations are handled as status updates (set to `CANCELLED`) so the history is preserved.
+- Booking start times must be in the future and end times must be after start times.
 
 ## API Endpoints
 

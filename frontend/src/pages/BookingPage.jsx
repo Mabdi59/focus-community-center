@@ -47,6 +47,11 @@ const BookingPage = () => {
     setError('');
     setSuccess('');
 
+    if (new Date(formData.endTime) <= new Date(formData.startTime)) {
+      setError('End time must be after start time.');
+      return;
+    }
+
     try {
       await bookingService.createBooking({
         facilityId: parseInt(id),

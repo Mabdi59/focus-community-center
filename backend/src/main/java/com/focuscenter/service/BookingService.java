@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -49,6 +50,19 @@ public class BookingService {
         Facility facility = facilityRepository.findById(request.getFacilityId())
                 .orElseThrow(() -> new RuntimeException("Facility not found"));
 
+        if (Boolean.FALSE.equals(facility.getIsAvailable())) {
+            throw new RuntimeException("Facility is not available for booking");
+        }
+
+        if (request.getEndTime().isBefore(request.getStartTime())
+                || request.getEndTime().isEqual(request.getStartTime())) {
+            throw new RuntimeException("End time must be after start time");
+        }
+
+        if (request.getStartTime().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Bookings must start in the future");
+        }
+
         // Check for overlapping bookings
         List<Booking> overlappingBookings = bookingRepository.findOverlappingBookings(
                 request.getFacilityId(),
@@ -61,11 +75,12 @@ public class BookingService {
         }
 
         // Calculate total price based on hours
-        long hours = Duration.between(request.getStartTime(), request.getEndTime()).toHours();
-        if (hours == 0) {
-            hours = 1; // Minimum 1 hour
+        long minutes = Duration.between(request.getStartTime(), request.getEndTime()).toMinutes();
+        if (minutes <= 0) {
+            throw new RuntimeException("Invalid booking duration");
         }
-        double totalPrice = facility.getHourlyRate() * hours;
+        long billableHours = Math.max(1, (long) Math.ceil(minutes / 60.0));
+        double totalPrice = facility.getHourlyRate() * billableHours;
 
         Booking booking = new Booking();
         booking.setUser(user);
@@ -86,6 +101,8 @@ public class BookingService {
     }
 
     public void deleteBooking(Long id) {
-        bookingRepository.deleteById(id);
+        Booking booking = getBookingById(id);
+        booking.setStatus(Booking.BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
     }
 }
