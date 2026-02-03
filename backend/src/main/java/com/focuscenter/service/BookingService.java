@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.EnumSet;
 import java.util.List;
 
 @Service
@@ -36,6 +37,15 @@ public class BookingService {
 
     public List<Booking> getBookingsByFacilityId(Long facilityId) {
         return bookingRepository.findByFacilityId(facilityId);
+    }
+
+    public List<Booking> getActiveBookingsByFacilityInRange(Long facilityId, LocalDateTime start, LocalDateTime end) {
+        return bookingRepository.findActiveBookingsInRange(
+                facilityId,
+                start,
+                end,
+                getActiveStatuses()
+        );
     }
 
     public Booking getBookingById(Long id) {
@@ -67,7 +77,8 @@ public class BookingService {
         List<Booking> overlappingBookings = bookingRepository.findOverlappingBookings(
                 request.getFacilityId(),
                 request.getStartTime(),
-                request.getEndTime()
+                request.getEndTime(),
+                getActiveStatuses()
         );
 
         if (!overlappingBookings.isEmpty()) {
@@ -104,5 +115,9 @@ public class BookingService {
         Booking booking = getBookingById(id);
         booking.setStatus(Booking.BookingStatus.CANCELLED);
         bookingRepository.save(booking);
+    }
+
+    private EnumSet<Booking.BookingStatus> getActiveStatuses() {
+        return EnumSet.of(Booking.BookingStatus.PENDING, Booking.BookingStatus.CONFIRMED);
     }
 }

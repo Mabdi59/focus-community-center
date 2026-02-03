@@ -74,6 +74,13 @@ export const bookingService = {
     return response.data;
   },
 
+  getBookingsByFacilityRange: async (facilityId, start, end) => {
+    const response = await api.get(
+      `/bookings/facility/${facilityId}/range?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`
+    );
+    return response.data;
+  },
+
   createBooking: async (bookingData) => {
     const response = await api.post('/bookings', bookingData);
     return response.data;

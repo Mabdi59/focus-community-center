@@ -49,6 +49,94 @@
   color: var(--dark-text);
 }
 
+.availability-section {
+  margin: 20px 0;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.availability-header h4 {
+  margin: 0 0 4px;
+}
+
+.availability-header p {
+  margin: 0 0 12px;
+  color: var(--muted-text);
+  font-size: 0.9rem;
+}
+
+.availability-status {
+  margin-bottom: 12px;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.time-slot {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px;
+  background: white;
+  color: var(--dark-text);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.time-slot:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.time-slot--booked {
+  background: #fbeaea;
+  border-color: #f5bcbc;
+  color: #a94442;
+  cursor: not-allowed;
+}
+
+.time-slot:disabled {
+  opacity: 0.8;
+}
+
+.availability-legend {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 0.85rem;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-item::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.legend-item--available::before {
+  background: white;
+  border: 1px solid var(--border-color);
+}
+
+.legend-item--booked::before {
+  background: #fbeaea;
+  border: 1px solid #f5bcbc;
+}
+
 @media (max-width: 768px) {
   .booking-layout {
     grid-template-columns: 1fr;
