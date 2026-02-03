@@ -1,0 +1,30 @@
+.site-footer {
+  background: white;
+  border-top: 1px solid var(--border-color);
+  margin-top: 40px;
+  padding: 32px 0;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.site-footer h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.site-footer h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.site-footer p {
+  color: var(--light-text);
+  line-height: 1.5;
+  max-width: 360px;
+}

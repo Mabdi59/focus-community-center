@@ -1,5 +1,6 @@
 package com.focuscenter.service;
 
+import com.focuscenter.config.SiteInfo;
 import com.focuscenter.dto.FacilityRequest;
 import com.focuscenter.model.Facility;
 import com.focuscenter.repository.FacilityRepository;
@@ -36,6 +37,7 @@ public class FacilityService {
         facility.setType(request.getType());
         facility.setIsAvailable(request.getIsAvailable());
         facility.setImageUrl(request.getImageUrl());
+        facility.setAddress(SiteInfo.FACILITY_ADDRESS);
         return facilityRepository.save(facility);
     }
 
@@ -48,6 +50,7 @@ public class FacilityService {
         facility.setType(request.getType());
         facility.setIsAvailable(request.getIsAvailable());
         facility.setImageUrl(request.getImageUrl());
+        facility.setAddress(SiteInfo.FACILITY_ADDRESS);
         return facilityRepository.save(facility);
     }
 

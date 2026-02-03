@@ -2,6 +2,8 @@
 
 Full-stack web application for a public community indoor facility with booking management system.
 
+**Location:** 1880 E Dublin Granville Rd, Columbus, OH 43229
+
 ## Features
 
 ### Backend (Java Spring Boot)
