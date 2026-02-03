@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -15,11 +16,22 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByFacilityId(Long facilityId);
     
     @Query("SELECT b FROM Booking b WHERE b.facility.id = :facilityId AND " +
-           "((b.startTime < :endTime AND b.endTime > :startTime)) AND " +
-           "b.status != 'CANCELLED'")
+           "b.startTime < :endTime AND b.endTime > :startTime AND " +
+           "b.status IN :statuses ORDER BY b.startTime")
     List<Booking> findOverlappingBookings(
         @Param("facilityId") Long facilityId,
         @Param("startTime") LocalDateTime startTime,
-        @Param("endTime") LocalDateTime endTime
+        @Param("endTime") LocalDateTime endTime,
+        @Param("statuses") Collection<Booking.BookingStatus> statuses
+    );
+
+    @Query("SELECT b FROM Booking b WHERE b.facility.id = :facilityId AND " +
+           "b.startTime < :endTime AND b.endTime > :startTime AND " +
+           "b.status IN :statuses ORDER BY b.startTime")
+    List<Booking> findActiveBookingsInRange(
+        @Param("facilityId") Long facilityId,
+        @Param("startTime") LocalDateTime startTime,
+        @Param("endTime") LocalDateTime endTime,
+        @Param("statuses") Collection<Booking.BookingStatus> statuses
     );
 }

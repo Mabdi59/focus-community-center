@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -50,6 +51,14 @@ public class BookingController {
     @GetMapping("/facility/{facilityId}")
     public ResponseEntity<List<Booking>> getBookingsByFacility(@PathVariable Long facilityId) {
         return ResponseEntity.ok(bookingService.getBookingsByFacilityId(facilityId));
+    }
+
+    @GetMapping("/facility/{facilityId}/range")
+    public ResponseEntity<List<Booking>> getBookingsByFacilityInRange(
+            @PathVariable Long facilityId,
+            @RequestParam("start") LocalDateTime start,
+            @RequestParam("end") LocalDateTime end) {
+        return ResponseEntity.ok(bookingService.getActiveBookingsByFacilityInRange(facilityId, start, end));
     }
 
     @PostMapping

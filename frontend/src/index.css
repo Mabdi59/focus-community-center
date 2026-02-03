@@ -115,6 +115,12 @@ body {
   border: 1px solid #ef4444;
 }
 
+.alert-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+
 .loading {
   text-align: center;
   padding: 40px;
