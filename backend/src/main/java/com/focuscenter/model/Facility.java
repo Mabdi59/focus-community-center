@@ -42,6 +42,9 @@ public class Facility {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "address")
+    private String address;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
